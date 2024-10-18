@@ -1,0 +1,484 @@
+import HeaderProfile from "@/component/layout/header/headerProfile";
+import { useRouter } from "next/router";
+import React, { useRef, useState } from "react";
+import CardPrusahaan from "@/component/card/CardPerusahaan/cardPerusahaan";
+import Button from "@/component/button";
+import Image from "@/component/image";
+import IconPlus from "@/component/icon/plus";
+import IconTrash from "@/component/icon/trash";
+import Modal from "@/component/modal/modalPendidikan";
+import Input from "@/component/form/input";
+export default function akun() {
+  const formRef = useRef();
+  const router = useRouter();
+  const { id } = router.query;
+
+  const [ModalPendidikan, setModalPendidikan] = useState(false);
+  const [ModalPengalaman, setModalPengalaman] = useState(false);
+
+  const [error, setError] = useState([]);
+  const [universitas, setUniversitas] = useState("");
+  const [gelar, setGelar] = useState("");
+  const [tanggalMulai, setTanggalMulai] = useState("");
+  const [tanggalBerakhir, setTanggalBerakhir] = useState("");
+  const [posisi, setPosisi] = useState("");
+  const [jenisPekerjaan, setJenisPekerjaan] = useState("");
+  const [namaPerusahaan, setNamaPerusahaan] = useState("");
+  const [lokasi, setLokasi] = useState("");
+
+  const validateInputs = () => {
+    const validasiErrors = {};
+    if (!universitas.trim()) {
+      validasiErrors.universitas = "Universitas harus di isi";
+    } else if (universitas.length > 100) {
+      validasiErrors.universitas = "Data yang di masukan terlalu panjang";
+    }
+    if (!gelar.trim()) {
+      validasiErrors.gelar = "Gelar harus di isi";
+    } else if (gelar.length > 100) {
+      validasiErrors.gelar = "Data yang di masukan terlalu panjang";
+    }
+    if (!tanggalMulai.trim()) {
+      validasiErrors.tanggalMulai = "Tanggal Mulai harus di isi";
+    }
+    if (!tanggalBerakhir.trim()) {
+      validasiErrors.tanggalBerakhir = "Tanggal Berakhir harus di isi";
+    }
+    return validasiErrors;
+  };
+
+  const validateInputs2 = () => {
+    const validasiErrors = {};
+    if (!posisi.trim()) {
+      validasiErrors.posisi = "posisi harus di isi";
+    } else if (posisi.length > 100) {
+      validasiErrors.posisi = "Data yang di masukan terlalu panjang";
+    }
+    if (!jenisPekerjaan.trim()) {
+      validasiErrors.jenisPekerjaan = "jenisPekerjaan harus di isi";
+    } else if (jenisPekerjaan.length > 100) {
+      validasiErrors.jenisPekerjaan = "Data yang di masukan terlalu panjang";
+    }
+    if (!namaPerusahaan.trim()) {
+      validasiErrors.namaPerusahaan = "namaPerusahaan harus di isi";
+    } else if (namaPerusahaan.length > 100) {
+      validasiErrors.namaPerusahaan = "Data yang di masukan terlalu panjang";
+    }
+    if (!lokasi.trim()) {
+      validasiErrors.lokasi = "lokasi harus di isi";
+    } else if (lokasi.length > 100) {
+      validasiErrors.lokasi = "Data yang di masukan terlalu panjang";
+    }
+    if (!tanggalMulai.trim()) {
+      validasiErrors.tanggalMulai = "Tanggal Mulai harus di isi";
+    }
+    if (!tanggalBerakhir.trim()) {
+      validasiErrors.tanggalBerakhir = "Tanggal Berakhir harus di isi";
+    }
+    return validasiErrors;
+  };
+
+  const formSubmitPendidikan = async (event) => {
+    event.preventDefault();
+    const validasiErrors = validateInputs();
+    if (Object.keys(validasiErrors).length == 0) {
+      const pendidikan = {
+        Universitas: universitas,
+        Gelas: gelar,
+        Tanggal_mulai: tanggalMulai,
+        Tanggal_berakhir: tanggalBerakhir,
+      };
+
+      console.log(pendidikan);
+    } else {
+      setError(validasiErrors);
+    }
+  };
+
+  const formSumbmitPengalaman = async (event) => {
+    event.preventDefault();
+    const validasiErrors = validateInputs2();
+    if (Object.keys(validasiErrors).length == 0) {
+      const Pengalaman = {
+        Posisi: posisi,
+        JenisPekerjaan: jenisPekerjaan,
+        NamaPerusahaan: namaPerusahaan,
+        Lokasi: lokasi,
+        Tanggal_mulai: tanggalMulai,
+        Tanggal_berakhir: tanggalBerakhir,
+      };
+
+      console.log(Pengalaman);
+    } else {
+      setError(validasiErrors);
+    }
+  };
+  return (
+    <div className="bg-slate-100">
+      <HeaderProfile />
+
+      <Modal
+        Judul="Tambahkan Pendidikan"
+        isVisible={ModalPendidikan}
+        onClose={() => setModalPendidikan(false)}
+      >
+        <form ref={formRef} onSubmit={formSubmitPendidikan}>
+          <div className="flex flex-col space-y-2">
+            <div className="flex flex-col space-y-2">
+              <label className="text-base text-slate-800">Universitas</label>
+              <Input
+                type="text"
+                height="h-10"
+                width="w-full"
+                onChange={(e) => {
+                  setUniversitas(e.target.value);
+                }}
+                error={error.universitas}
+              />
+            </div>
+            <div className="flex flex-col space-y-2">
+              <label className="text-base text-slate-800">Gelar</label>
+              <Input
+                type="text"
+                height="h-10"
+                width="w-full"
+                onChange={(e) => {
+                  setGelar(e.target.value);
+                }}
+                error={error.gelar}
+              />
+            </div>
+            <div className="flex justify-between space-x-2 ">
+              <div className="flex flex-col space-y-2 w-full">
+                <label className="text-base text-slate-800">
+                  Tanggal Mulai
+                </label>
+                <Input
+                  type="date"
+                  height="h-10"
+                  width="w-full"
+                  onChange={(e) => {
+                    setTanggalMulai(e.target.value);
+                  }}
+                  error={error.tanggalMulai}
+                />
+              </div>
+              <div className="flex flex-col space-y-2 w-full">
+                <label className="text-base text-slate-800">
+                  Tanggal Berakhir
+                </label>
+                <Input
+                  type="date"
+                  height="h-10"
+                  width="w-full"
+                  onChange={(e) => {
+                    setTanggalBerakhir(e.target.value);
+                  }}
+                  error={error.tanggalBerakhir}
+                />
+              </div>
+            </div>
+            <Button
+              name="Simpan"
+              height="h-10"
+              width="w-24"
+              bgColor="bg-blue-500"
+              textColor="text-white"
+              fontSize="font-semibold"
+              type="submit"
+            />
+          </div>
+        </form>
+      </Modal>
+
+      <Modal
+        Judul="Tambahkan Pengalaman"
+        isVisible={ModalPengalaman}
+        onClose={() => setModalPengalaman(false)}
+      >
+        <form ref={formRef} onSubmit={formSumbmitPengalaman}>
+          <div className="flex flex-col space-y-2">
+            <div className="flex flex-col space-y-2">
+              <label className="text-base text-slate-800">Posisi</label>
+              <Input
+                type="text"
+                height="h-10"
+                width="w-full"
+                onChange={(e) => {
+                  setPosisi(e.target.value);
+                }}
+                error={error.posisi}
+              />
+            </div>
+            <div className="flex flex-col space-y-2">
+              <label className="text-base text-slate-800">
+                Jenis Pekerjaan
+              </label>
+              <Input
+                type="text"
+                height="h-10"
+                width="w-full"
+                onChange={(e) => {
+                  setJenisPekerjaan(e.target.value);
+                }}
+                error={error.jenisPekerjaan}
+              />
+            </div>
+            <div className="flex flex-col space-y-2">
+              <label className="text-base text-slate-800">Nama Perusahan</label>
+              <Input
+                type="text"
+                height="h-10"
+                width="w-full"
+                onChange={(e) => {
+                  setNamaPerusahaan(e.target.value);
+                }}
+                error={error.namaPerusahaan}
+              />
+            </div>
+            <div className="flex flex-col space-y-2">
+              <label className="text-base text-slate-800">Lokasi</label>
+              <Input
+                type="text"
+                height="h-10"
+                width="w-full"
+                onChange={(e) => {
+                  setLokasi(e.target.value);
+                }}
+                error={error.lokasi}
+              />
+            </div>
+            <div className="flex justify-between space-x-2 ">
+              <div className="flex flex-col space-y-2 w-full">
+                <label className="text-base text-slate-800">
+                  Tanggal Mulai
+                </label>
+                <Input
+                  type="date"
+                  height="h-10"
+                  width="w-full"
+                  onChange={(e) => {
+                    setTanggalMulai(e.target.value);
+                  }}
+                  error={error.tanggalMulai}
+                />
+              </div>
+              <div className="flex flex-col space-y-2 w-full">
+                <label className="text-base text-slate-800">
+                  Tanggal Berakhir
+                </label>
+                <Input
+                  type="date"
+                  height="h-10"
+                  width="w-full"
+                  onChange={(e) => {
+                    setTanggalBerakhir(e.target.value);
+                  }}
+                  error={error.tanggalBerakhir}
+                />
+              </div>
+            </div>
+            <Button
+              name="Simpan"
+              height="h-10"
+              width="w-24"
+              bgColor="bg-blue-500"
+              textColor="text-white"
+              fontSize="font-semibold"
+              type="submit"
+            />
+          </div>
+        </form>
+      </Modal>
+
+      <div className="flex px-24 py-4">
+        <div className="w-4/6 py-4 flex flex-col space-y-4 px-2">
+          <div className="flex flex-col bg-white rounded-lg p-4 space-y-2">
+            <div className="">
+              <Image
+                height="150px"
+                width="150px"
+                src="https://cdn-icons-png.freepik.com/512/3177/3177440.png"
+              />
+            </div>
+            <div className="flex space-x-4 items-center">
+              <h1 className="font-semibold text-2xl text-slate-900">
+                Nama Profile
+              </h1>
+              <Button
+                name="Verifikasi Sekarang"
+                height="h-10"
+                width=""
+                bgColor="bg-blue-500"
+                textColor="text-white"
+                fontSize="font-semibold"
+              />
+            </div>
+            <div className="">
+              <p>
+                Terkoneksi, Terinspirasi: Suara yang Berbagi, Jiwa yang
+                Terhubung.
+              </p>
+            </div>
+            <div className="">
+              <Button
+                name="Edit Profile"
+                height="h-10"
+                width=""
+                bgColor="bg-blue-500"
+                textColor="text-white"
+                fontSize="font-semibold"
+              />
+            </div>
+          </div>
+          <div className="flex flex-col bg-white rounded-lg p-4 space-y-4">
+            <div className="flex justify-between">
+              <h1 className="font-semibold text-xl text-slate-900">
+                Pengalaman
+              </h1>
+              <div
+                className="cursor-pointer"
+                onClick={() => setModalPengalaman(true)}
+              >
+                <IconPlus height="30" width="30" fill="bg-grayy" />
+              </div>
+            </div>
+            <div className="flex flex-col space-y-4">
+              <div className="flex space-x-4 justify-between">
+                <div className="flex">
+                  <div className="m-4">
+                    <Image
+                      height="50px"
+                      width="50px"
+                      src="https://jasalogocepat.com/wp-content/uploads/2023/09/logo-bumn-tanpa-background-1-jasalogocepat-768x253.png"
+                    />
+                  </div>
+                  <div className="flex flex-col space-y-1">
+                    <h1 className="font-semibold text-lg text-slate-800">
+                      Nama Pekerjaan
+                    </h1>
+                    <h2 className="text-slate-500 text-sm">Nama Perusahan</h2>
+                    <div className="flex space-x-2">
+                      <p className="text-slate-500 text-xs">
+                        Tanggal 02-04-2024
+                      </p>
+                      <p className="text-slate-500 text-xs">
+                        Tanggal 05-04-2024
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <IconTrash height="30" width="30" fill="bg-grayy" />
+                </div>
+              </div>
+              <div className="flex space-x-4 justify-between">
+                <div className="flex">
+                  <div className="m-4">
+                    <Image
+                      height="50px"
+                      width="50px"
+                      src="https://jasalogocepat.com/wp-content/uploads/2023/09/logo-bumn-tanpa-background-1-jasalogocepat-768x253.png"
+                    />
+                  </div>
+                  <div className="flex flex-col space-y-1">
+                    <h1 className="font-semibold text-lg text-slate-800">
+                      Nama Pekerjaan
+                    </h1>
+                    <h2 className="text-slate-500 text-sm">Nama Perusahan</h2>
+                    <div className="flex space-x-2">
+                      <p className="text-slate-500 text-xs">
+                        Tanggal 02-04-2024
+                      </p>
+                      <p className="text-slate-500 text-xs">
+                        Tanggal 05-04-2024
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <IconTrash height="30" width="30" fill="bg-grayy" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col bg-white rounded-lg p-4 space-y-4">
+            <div className="flex justify-between">
+              <h1 className="font-semibold text-xl text-slate-900">
+                Pendidikan
+              </h1>
+              <div
+                className="cursor-pointer"
+                onClick={() => setModalPendidikan(true)}
+              >
+                <IconPlus height="30" width="30" fill="bg-grayy" />
+              </div>
+            </div>
+            <div className="flex flex-col space-y-4">
+              <div className="flex space-x-4 justify-between">
+                <div className="flex">
+                  <div className="m-4">
+                    <Image
+                      height="50px"
+                      width="50px"
+                      src="https://jasalogocepat.com/wp-content/uploads/2023/09/logo-bumn-tanpa-background-1-jasalogocepat-768x253.png"
+                    />
+                  </div>
+                  <div className="flex flex-col space-y-1">
+                    <h1 className="font-semibold text-lg text-slate-800">
+                      Nama Sekolah
+                    </h1>
+                    <h2 className="text-slate-500 text-sm">Jurusan</h2>
+                    <div className="flex space-x-2">
+                      <p className="text-slate-500 text-xs">
+                        Tanggal 02-04-2024
+                      </p>
+                      <p className="text-slate-500 text-xs">
+                        Tanggal 05-04-2024
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <IconTrash height="30" width="30" fill="bg-grayy" />
+                </div>
+              </div>
+              <div className="flex space-x-4 justify-between">
+                <div className="flex">
+                  <div className="m-4">
+                    <Image
+                      height="50px"
+                      width="50px"
+                      src="https://jasalogocepat.com/wp-content/uploads/2023/09/logo-bumn-tanpa-background-1-jasalogocepat-768x253.png"
+                    />
+                  </div>
+                  <div className="flex flex-col space-y-1">
+                    <h1 className="font-semibold text-lg text-slate-800">
+                      Nama Pekerjaan
+                    </h1>
+                    <h2 className="text-slate-500 text-sm">Nama Perusahan</h2>
+                    <div className="flex space-x-2">
+                      <p className="text-slate-500 text-xs">
+                        Tanggal 02-04-2024
+                      </p>
+                      <p className="text-slate-500 text-xs">
+                        Tanggal 05-04-2024
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <IconTrash height="30" width="30" fill="bg-grayy" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="w-2/6 py-4 px-2">
+          <CardPrusahaan />
+        </div>
+      </div>
+    </div>
+  );
+}
